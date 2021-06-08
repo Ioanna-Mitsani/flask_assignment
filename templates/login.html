@@ -1,0 +1,20 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Login {% endblock title %}
+
+{% block content %}
+<div class="login">
+    <div class="login-form">
+    <form action="login.html" method="POST">
+    <label for="username">Username:</label><br>
+    <input type="text" name="username" required><br>
+    <label for="password">Password:</label><br>
+    <input type="password" required>
+    </form>
+    </div>
+    <div class="login-info">
+    
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,18 @@
+{% extends "layouts/base.html" %} {# Extends the base layout #}
+
+{% block title %} Welcome! {% endblock title %}
+
+{% block content %} {# The main content of the index page #}
+<div class="flex index-content">
+<h1>Hello.</h1>
+<p>This is my student project on Python/Flask Framework. It is mainly a login system
+but it also includes several other web app functionalities and tech.
+Some of them used here are Sessions & Cookies, the right usage of HTTP requests & statuses, Jinja templates
+and connection to an SQLite Database.
+Explore the whole project by clicking the button below to login.
+</p>
+<a class="btn" href="{{url_for(login.html)}">Login</a>
+</div>
+
+
+{% endblock content %}
