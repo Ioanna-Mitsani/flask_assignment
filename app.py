@@ -47,7 +47,7 @@ def login():
     form_username = request.form.get('username')  # Registering the username input
     form_password = request.form.get('password')  # Registering the password input
 
-    if form_username == user.username and form_password == 'demo':  # Credentials check with database
+    if form_username == 'demo' and form_password == 'demo':  # Credentials check with database
         session['username'] = form_username  # If credentials are valid, are registered to cookie
         session['password'] = form_password
         return redirect(url_for('dashboard'))

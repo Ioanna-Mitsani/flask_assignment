@@ -1,18 +1,32 @@
-{% extends "layouts/base.html" %} {# Extends the base layout #}
+{% extends "layouts/base.html" %}
 
-{% block title %} Welcome! {% endblock title %}
+{% block title %} Hello! {% endblock %} 
 
-{% block content %} {# The main content of the index page #}
-<div class="flex index-content">
-<h1>Hello.</h1>
-<p>This is my student project on Python/Flask Framework. It is mainly a login system
-but it also includes several other web app functionalities and tech.
-Some of them used here are Sessions & Cookies, the right usage of HTTP requests & statuses, Jinja templates
-and connection to an SQLite Database.
-Explore the whole project by clicking the button below to login.
-</p>
-<a class="btn" href="{{url_for('login_page')}}">Login</a>
-</div>
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
+{% block content %}
 
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-profile">
+                <div class="card-body">
+                    <h6 class="card-category text-gray">LOGIN SYSTEM WITH PYTHON FLASK FRAMEWORK</h6>
+                    <h4 class="card-title">
+                        Hello.
+                    </h4>
+                        <p>This is my student project on Python's Flask Framework as part of my web development studies at SAE Athens.</p> <br>
+                        <p>It is a simple login system for websites or web apps, 
+                        where I used basic web functions such as sessions, cookies, page redirection, HTTP requests & statuses. Also learned how to do the CRUD ops for an SQLite Database.</p> <br>
+                        <p>The UI of this app is a free open-source Jinja html template, suitable to demonstrate the login system's functionality.</p> <br>
+                        <p><i>Click the Login button below to explore the login system.</i></p> <br>
+                    <a href="{{url_for('login_page')}}" class="btn btn-primary btn-round">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 {% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

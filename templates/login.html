@@ -1,20 +1,72 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Login {% endblock title %}
+{% block title %} Login {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="login">
-    <div class="login-form">
-    <form action="login.html" method="POST">
-    <label for="username">Username:</label><br>
-    <input type="text" name="username" required><br>
-    <label for="password">Password:</label><br>
-    <input type="password" required>
-    </form>
-    </div>
-    <div class="login-info">
-    
-    </div>
-</div>
+
+        <div class="row">
+          <div class="col-md-8">
+            <div class="card">
+
+              <form role="form" method="post" action="{{ url_for('login') }}">
+              
+                <div class="card-header">
+                  <h6 class="card-category text-gray">LOGIN SYSTEM WITH PYTHON FLASK FRAMEWORK</h6>
+
+                  <p>
+                      Use the demo credentials to log in: <br><br>
+                      <b>Username: </b>demo <br>
+                      <b>Password: </b>demo <br>
+                  </p>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                      <div class="col-md-3 px-md-1">
+                        <div class="form-group">
+                          <label>Username</label>
+                          <input class="form-control" id="username" name="username" required="" type="text" value="">
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="row">
+
+                      <div class="col-md-3 px-md-1">
+                        <div class="form-group">
+                          <label>Password</label>
+                          <input class="form-control" id="password" name="password" required="" type="password" value="">
+                        </div>
+                      </div>
+
+                    </div>
+                    
+                </div>
+                <div class="card-footer">
+                  <button type="submit" name="login" class="btn btn-fill btn-primary">Login</button>
+                  &nbsp; &nbsp;
+                  Don't have an account? <a href="/register.html" class="text-primary">Create</a>
+                </div>
+
+              </form>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div>{{ message }}</div>
+                        {% endfor%}
+                    {% endif %}
+                {% endwith %}
+            </div>
+          </div>
+      </div>
+
 
 {% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
