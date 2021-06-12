@@ -1,6 +1,7 @@
+from __future__ import print_function
 # Import here the elements needed from libraries or whole libraries
-from flask import Flask, render_template, request, session, redirect, flash, abort, url_for, g
-# redirect, flash, request
+from flask import Flask, render_template, request, session, redirect, flash, url_for, g
+# redirect, flash, request abort
 from os import environ
 from pathlib import Path
 import sqlite3
@@ -22,6 +23,47 @@ def get_conn():
         g.conn = conn       # setattr(g, 'conn', conn)
 
     return g.conn
+
+
+@app.before_request
+def get_users():
+    # Quick return if request comes from static asset
+    if not request or request.endpoint == 'static':
+        return
+
+    if not hasattr(g, 'users'):
+        cur = get_conn().cursor()
+        users = cur.execute(
+            '''
+            SELECT [uid], [username], [password], [email], [f_name], [l_name], [address],
+            [city], [country], [postal_code], [about] FROM [user]
+            '''
+        ).fetchall()
+
+        setattr(g, 'users', users)
+
+
+@app.teardown_request
+def teardown_request(e):
+    '''
+    Close connection on request teardown
+    '''
+    if hasattr(g, 'conn'):
+        app.logger.debug('» Teardown Request')
+        app.logger.debug('» Connection closed')
+        g.conn.close()
+
+
+@app.teardown_appcontext
+def close_connection(e):
+    '''
+    Close connection on appcontext teardown
+    This will fire whether there was an exception or not
+    '''
+    if conn := g.pop('conn', None):
+        app.logger.debug('» Teardown AppContext')
+        app.logger.debug('» Connection closed')
+        conn.close()
 
 
 # Index page router
@@ -47,13 +89,21 @@ def login():
     form_username = request.form.get('username')  # Registering the username input
     form_password = request.form.get('password')  # Registering the password input
 
-    if form_username == 'demo' and form_password == 'demo':  # Credentials check with database
+    cur = get_conn().cursor()
+    users = cur.execute(
+            '''
+            SELECT [uid], [username], [password], [email], [f_name], [l_name], [address],
+            [city], [country], [postal_code], [about] FROM [user]
+            '''
+        ).fetchall()
+    setattr(g, 'users', users)
+
+    if form_username == users[0]['username'] and form_password == users[0]['password']:  # Credentials check with database
         session['username'] = form_username  # If credentials are valid, are registered to cookie
         session['password'] = form_password
         return redirect(url_for('dashboard'))
     else:
-        return render_template('page-403.html'), 403  # Alternatively:
-        abort(403)
+        return render_template('page-403.html'), 403  # Alternatively: abort(403)
 
 
 @app.get('/profile')
@@ -66,13 +116,13 @@ def profile():
 
 @app.get('/logout')
 def logout():
-    if session['username'] and session['password'] is not None:
+    if session['username'] is not None and session['password'] is not None:
         session.pop('username')
         session.pop('password')
-        return redirect(url_for(login_page))
+        return redirect(url_for('login_page'))
     else:
         flash('You are not logged in!')
-        return redirect(url_for(login_page))
+        return redirect(url_for('login_page'))
 
 
 if __name__ == '__main__':

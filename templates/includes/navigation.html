@@ -44,7 +44,11 @@
               <li class="dropdown nav-item">
                 <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                   <div class="photo">
+                  {% if session['username'] %}
                     <img src="/static/assets/img/anime3.png" alt="Profile Photo">
+                    {% else %}
+                    <img src="/static/assets/img/default-avatar.png" alt="No user">
+                    {% endif %}
                   </div>
                   <b class="caret d-none d-lg-block d-xl-block"></b>
                   <p class="d-lg-none">
@@ -52,9 +56,13 @@
                   </p>
                 </a>
                 <ul class="dropdown-menu dropdown-navbar">
-                  <li class="nav-link"><a href="{{ url_for('profile') }}" class="nav-item dropdown-item">Profile</a></li>
+                {% if session %}
+                  <li class="nav-link"><a href="{{ url_for('profile') }}" class="nav-item dropdown-item">Hello, {{ session['username'] }}!</a></li>
                   <li class="dropdown-divider"></li>
                   <li class="nav-link"><a href="{{ url_for('logout') }}" class="nav-item dropdown-item">Log out</a></li>
+                  {% else %}
+                  <li class="nav-link"><a href="{{ url_for('login_page') }}" class="nav-item dropdown-item">Login</a></li>
+                  {% endif %}
                 </ul>
               </li>
               <li class="separator d-lg-none"></li>
