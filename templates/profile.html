@@ -12,6 +12,11 @@
     <div class="card">
       <div class="card-header">
         <h5 class="title">Edit Profile</h5>
+        {% with messages = get_flashed_messages() %}
+            {% for msg in messages %}
+            <p>{{ msg }}</p>
+            {% endfor %}
+        {% endwith %}
       </div>
       <div class="card-body">
         <form>

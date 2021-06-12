@@ -80,7 +80,11 @@ def dashboard():
 # Login form page 'GET' router
 @app.get('/login')
 def login_page():
-    return render_template("login.html")  # Renders login.html
+    if session['username'] is None:
+        return render_template("login.html")  # Renders login.html
+    else:
+        flash('You are already logged in!')
+        return redirect(url_for('profile'))
 
 
 # Login form 'POST' method handling
