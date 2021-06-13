@@ -1,0 +1,28 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Page 401 {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-profile">
+                <div class="card-body">
+                    <h6 class="card-category text-gray">Error 401</h6>
+                    <h4 class="card-title">
+                        Unauthorized access denied - please authenticate with the correct credentials.
+                    </h4>
+                    <a href="{{url_for('login_page')}}" class="btn btn-primary btn-round">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
