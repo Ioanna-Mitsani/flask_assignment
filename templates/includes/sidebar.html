@@ -29,12 +29,6 @@
           </li>
           {%endif%}
           <li>
-            <a href="/register.html" >
-              <i class="tim-icons icon-user-run"></i>
-              <p>Register</p>
-            </a>
-          </li>
-          <li>
               {% if session['username'] %}
             <a href="{{ url_for('logout') }}" >
               <i class="tim-icons icon-button-power"></i>

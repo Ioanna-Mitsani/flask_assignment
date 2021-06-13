@@ -49,16 +49,16 @@
                 </div>
                 <div class="card-footer">
                   <button type="submit" name="login" class="btn btn-fill btn-primary">Login</button>
-                  &nbsp; &nbsp;
-                  Don't have an account? <a href="/register.html" class="text-primary">Create</a>
                 </div>
 
               </form>
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
+                    <div class="error-msg">
                         {% for message in messages %}
-                            <div>{{ message }}</div>
+                            <p>{{ message }}</p>
                         {% endfor%}
+                    </div>
                     {% endif %}
                 {% endwith %}
             </div>

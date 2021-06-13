@@ -1,0 +1,11 @@
+/* Additional CSS added by me for flash messages */
+
+.error-msg{
+    display: flex;
+    padding: 1em;
+}
+
+.error-msg p{
+    font-style: italic;
+    font-weight: 900;
+}

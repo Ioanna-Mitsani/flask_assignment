@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Page 404 {% endblock %} 
+{% block title %} Page 404 {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -15,7 +15,7 @@
                     <h4 class="card-title">
                         Page not found
                     </h4>
-                    <a href="/" class="btn btn-primary btn-round">Home</a>
+                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-round">Home</a>
                 </div>
             </div>
         </div>

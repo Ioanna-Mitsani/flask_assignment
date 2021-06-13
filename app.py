@@ -11,7 +11,7 @@ app = Flask(__name__)
 # Secret key declaration to create browser session
 app.secret_key = environ.get('SECRET_KEY', 'random1234')
 
-DATABASE_PATH = Path(__file__).parent / environ.get("DB_PATH", 'data/flask_project.db')
+DATABASE_PATH = Path(__file__).parent / environ.get('DB_PATH', 'data/flask_project.db')
 
 
 # Function that initializes the connection to Database
@@ -24,43 +24,9 @@ def get_conn():
     return g.conn
 
 
-# Function executed before every request
-@app.before_request
-def get_users():
-    # Quick return if request comes from static asset
-    if not request or request.endpoint == 'static':
-        return
-
-    if not hasattr(g, 'users'):
-        cur = get_conn().cursor()
-        users = cur.execute(
-            '''
-            SELECT [uid], [username], [password], [email], [f_name], [l_name], [address],
-            [city], [country], [postal_code], [about] FROM [user]
-            '''
-        ).fetchall()
-
-        setattr(g, 'users', users)
-
-
-# Function that destroys connection to database
-@app.teardown_request
-def teardown_request(e):
-    '''
-    Close connection on request teardown
-    '''
-    if hasattr(g, 'conn'):
-        app.logger.debug('» Teardown Request')
-        app.logger.debug('» Connection closed')
-        g.conn.close()
-
-
+# Function that closes connection to database on appcontext teardown
 @app.teardown_appcontext
 def close_connection(e):
-    '''
-    Close connection on appcontext teardown
-    This will fire whether there was an exception or not
-    '''
     if conn := g.pop('conn', None):
         app.logger.debug('» Teardown AppContext')
         app.logger.debug('» Connection closed')
@@ -76,19 +42,19 @@ def homepage():
 # Dashboard router
 @app.get('/dashboard')
 def dashboard():
-    if session['username']:
+    if 'username' in session:
         return render_template("dashboard.html")
     else:
-        return render_template('page-403.html')
+        return render_template('page-401.html')
 
 
-# Login form page 'GET' router
+# Login form page 'GET' router handling function
 @app.get('/login')
 def login_page():
-    if session:
+    if 'username' in session:
         return redirect(url_for('dashboard'))
-
-    return render_template('login.html')  # Renders login.html
+    else:
+        return render_template('login.html')  # Renders login.html
 
 
 # Login form 'POST' method handling
@@ -97,7 +63,7 @@ def login():
     form_username = request.form.get('username')  # Registering the username input
     form_password = request.form.get('password')  # Registering the password input
 
-    cur = get_conn().cursor()
+    cur = get_conn().cursor()                     # Creating cursor for executing query on db
     user = cur.execute(
             '''
             SELECT [uid], [username], [password]
@@ -109,41 +75,66 @@ def login():
     setattr(g, 'user', user)
 
     if form_username == user['username'] and form_password == user['password']:  # Credentials check with the ones in database
-        session['username'] = user['username']  # If credentials are valid, are registered to session obj
+        session['username'] = user['username']  # If credentials are valid, are registered to session
         session['password'] = user['password']
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('dashboard'))   # Then user gets to dashboard page
     else:
-        flash('Please enter the correct credentials!')
+        flash('Please enter the correct credentials!')  # If credentials are wrong a message flashes and gets redirected to /login
         return redirect(url_for('login_page'))
 
 
-@app.route('/profile/<username>')
+# Profile router handling function
+@app.route('/profile/<username>')   # Profile needs router param to be accessed
 def profile(username):
-    cur = get_conn().cursor()
-    user = cur.execute(
-        '''
-        SELECT *
-        FROM [user]
-        WHERE [username] = :username
-        ''',
-        {'username': username}
-    ).fetchone()
+    if 'username' in session:       # If user is logged in, we fetch all his data from db
+        cur = get_conn().cursor()
+        user = cur.execute(
+            '''
+            SELECT *
+            FROM [user]
+            WHERE [username] = :username
+            ''',
+            {'username': username}
+        ).fetchone()
 
-    if user is None:
-        return render_template('page-404.html')
+        if user is None:
+            return render_template('page-404.html')   # If query results are empty the profile doesn't exist --> 404
 
-    return render_template('profile.html', user=user)
+        if username == session['username']:
+            return render_template('profile.html', user=user)
+        else:
+            return render_template('page-401.html')
+
+    else:
+        flash('You need to login first!')   # If user is not logged in he gets redirected to login page
+        return redirect(url_for('login_page'))
 
 
+# Logout handling
 @app.get('/logout')
 def logout():
-    if session['username'] is not None and session['password'] is not None:
-        session.pop('username')
+    if 'username' in session:   # If 'username' is registered in session, then user is logged in
+        session.pop('username')     # We remove the registered values
         session.pop('password')
-        return redirect(url_for('login_page'))
+        return redirect(url_for('login_page'))  # And we redirect to login
     else:
-        flash('You are not logged in!')
-        return redirect(url_for('login_page'))
+        flash('You are not logged in!')     # If someone tries to logout without being logged in, message appears
+        return redirect(url_for('login_page'))           # and gets redirected to login page
+
+
+@app.errorhandler(404)
+def error404(e):
+    return render_template('page-404.html'), 404
+
+
+@app.errorhandler(401)
+def error401(e):
+    return render_template('page-401.html'), 401
+
+
+@app.errorhandler(500)
+def error500(e):
+    return render_template('page-500.html'), 500
 
 
 if __name__ == '__main__':
