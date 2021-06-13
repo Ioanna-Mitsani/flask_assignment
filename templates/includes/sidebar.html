@@ -3,11 +3,11 @@
     <div class="sidebar">
       <div class="sidebar-wrapper">
         <div class="logo">
-          <a target="_blank" rel="sponsored noopener noreferrer" 
+          <a target="_blank" rel="sponsored noopener noreferrer"
              href="https://github.com/Ioanna-Mitsani/flask_assignment" class="simple-text logo-mini">
             <i class="fab fa-github"></i>
           </a>
-          <a target="_blank" rel="sponsored noopener noreferrer" 
+          <a target="_blank" rel="sponsored noopener noreferrer"
              href="https://github.com/Ioanna-Mitsani/flask_assignment" class="simple-text logo-normal">
             Source Code
           </a>
@@ -22,7 +22,7 @@
             </a>
           </li>
           <li>
-            <a href="{{ url_for('profile') }}">
+            <a href="{{ url_for('profile', username=session['username']) }}">
               <i class="tim-icons icon-single-02"></i>
               <p>User Profile</p>
             </a>
@@ -47,6 +47,6 @@
             {% endif %}
           </li>
         </ul>
-        
+
       </div>
     </div>
