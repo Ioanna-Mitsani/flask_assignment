@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Hello! {% endblock %} 
+{% block title %} Hello! {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -16,16 +16,16 @@
                         Hello.
                     </h4>
                         <p>This is my student project on Python's Flask Framework as part of my web development studies at SAE Athens.</p> <br>
-                        <p>It is a simple login system for websites or web apps, 
-                        where I used basic web functions such as sessions, cookies, page redirection, HTTP requests & statuses. Also learned how to do the CRUD ops for an SQLite Database.</p> <br>
-                        <p>The UI of this app is a free open-source Jinja html template, suitable to demonstrate the login system's functionality.</p> <br>
+                        <p>It is a simple login system,
+                        where I used basic web functionalities such as sessions, cookies, page redirection, HTTP requests & statuses. Also learned how to do the CRUD ops for an SQLite Database.</p> <br>
+                        <p>The UI of this app is a free open-source Jinja html template, suitable to demonstrate how the login system works.</p> <br>
                         <p><i>Click the Login button below to explore the login system.</i></p> <br>
                     <a href="{{url_for('login_page')}}" class="btn btn-primary btn-round">Login</a>
                 </div>
             </div>
         </div>
     </div>
-    
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
