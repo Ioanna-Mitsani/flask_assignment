@@ -1,4 +1,5 @@
 FLASK_APP=app.py
 FLASK_ENV=development
 PORT=5000
+SECRET_KEY=f16d1d300ba52ced4cfd8c41095aa614959f2b06ad525d74
 DB_PATH=data/flask_project.db
