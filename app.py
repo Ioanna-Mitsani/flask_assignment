@@ -76,7 +76,6 @@ def login():
 
     if form_username == user['username'] and form_password == user['password']:  # Credentials check with the ones in database
         session['username'] = user['username']  # If credentials are valid, are registered to session
-        session['password'] = user['password']
         return redirect(url_for('dashboard'))   # Then user gets to dashboard page
     else:
         flash('Please enter the correct credentials!')  # If credentials are wrong a message flashes and gets redirected to /login
