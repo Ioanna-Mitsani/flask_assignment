@@ -74,7 +74,7 @@ def login():
         ).fetchone()
     setattr(g, 'user', user)
 
-    if form_username == user['username'] and form_password == user['password']:  # Credentials check with the ones in database
+    if user:  # Credentials check with the ones in database
         session['username'] = user['username']  # If credentials are valid, are registered to session
         return redirect(url_for('dashboard'))   # Then user gets to dashboard page
     else:
@@ -114,7 +114,6 @@ def profile(username):
 def logout():
     if 'username' in session:   # If 'username' is registered in session, then user is logged in
         session.pop('username')     # We remove the registered values
-        session.pop('password')
         return redirect(url_for('login_page'))  # And we redirect to login
     else:
         flash('You are not logged in!')     # If someone tries to logout without being logged in, message appears
